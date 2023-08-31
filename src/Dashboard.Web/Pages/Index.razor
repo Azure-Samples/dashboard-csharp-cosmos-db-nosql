@@ -1,0 +1,85 @@
+﻿@page "/"
+@inject IOptions<Connection> options
+@inject IHttpClientFactory httpClientFactory
+@inject NavigationManager navigationManager
+
+<PageTitle>Index</PageTitle>
+<h1 class="text-3xl font-bold underline">Hello, world!</h1>
+
+<div class="p-6 max-w-sm bg-white rounded-xl shadow-lg flex items-center space-x-4">
+    <div class="shrink-0">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="h-12 w-12">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M4.26 10.147a60.436 60.436 0 00-.491 6.347A48.627 48.627 0 0112 20.904a48.627 48.627 0 018.232-4.41 60.46 60.46 0 00-.491-6.347m-15.482 0a50.57 50.57 0 00-2.658-.813A59.905 59.905 0 0112 3.493a59.902 59.902 0 0110.399 5.84c-.896.248-1.783.52-2.658.814m-15.482 0A50.697 50.697 0 0112 13.489a50.702 50.702 0 017.74-3.342M6.75 15a.75.75 0 100-1.5.75.75 0 000 1.5zm0 0v-3.675A55.378 55.378 0 0112 8.443m-7.007 11.55A5.981 5.981 0 006.75 15.75v-1.5" />
+        </svg>
+    </div>
+    <div>
+        <div class="text-xl font-medium text-black">Message</div>
+        <p class="text-slate-500">Welcome to your new app!</p>
+    </div>
+</div>
+
+<h2>Products</h2>
+
+<blockquote class="prose">
+    <em>Products count:</em>
+    @productsCount
+</blockquote>
+
+<table>
+    <thead>
+        <tr>
+            <th>#</th>
+            <th>Name</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach(var product in products)
+        {
+            <tr>
+                <td>@product.Id</td>
+                <td>@product.Name</td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<hr />
+
+<h2>Tags</h2>
+
+<blockquote>
+    <em>Tags count:</em>
+    @tagsCount
+</blockquote>
+
+<ol>
+    @foreach(var tag in tags)
+    {
+        <li>@tag</li>
+    }
+</ol>
+
+@code {
+    private List<Product> products = new();
+    private List<string> tags = new();
+    private int productsCount = 0;
+    private int tagsCount = 0;
+
+    protected override async Task OnInitializedAsync()
+    {
+        products.Clear();
+
+        HttpClient client = httpClientFactory.CreateClient();
+        client.BaseAddress = new Uri(options.Value.ApiUrl);
+
+        var productsResponse = await client.GetFromJsonAsync<Payload<Product>>("/products");
+
+        productsCount = productsResponse?.Count ?? 0;
+        products.AddRange(productsResponse?.Items ?? Enumerable.Empty<Product>());
+
+        var tagsResponse = await client.GetFromJsonAsync<Payload<string>>("/tags");
+
+        tagsCount = tagsResponse?.Count ?? 0;
+        tags.AddRange(tagsResponse?.Items ?? Enumerable.Empty<string>());
+    }
+}
