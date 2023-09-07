@@ -1,0 +1,35 @@
+@inject IJSRuntime jsRuntime
+
+<canvas id="@Id" style="max-height: 350px;"></canvas>
+
+@code {
+ 
+    [Parameter]
+    public string Id { get; init; } = $"visualization-{Guid.NewGuid()}";
+
+    [Parameter]
+    public string Type { get; set; } = "bar";
+
+    [Parameter]
+    public IEnumerable<(string label, decimal value)> Data { get; set; } = Enumerable.Empty<(string, decimal)>();
+
+    protected override async Task OnAfterRenderAsync(bool isFirstRender)
+    {
+        var config = new
+        {
+            Type = Type,
+            Data = new {
+                Labels = Data.Select(d => d.label).ToList<string>(),
+                Datasets = new[] {
+                    new {
+                        Data = Data.Select(d => d.value).ToList<decimal>(),
+                        BorderWidth = 0,
+                        HoverOffset = 4
+                    }
+                }
+            }
+        };
+
+        await jsRuntime.InvokeVoidAsync("createChart", Id, config);
+    }
+}
