@@ -1,7 +1,6 @@
 {
 	"name": ".NET development",
-	"dockerComposeFile": "docker-compose.yml",
-	"service": "dev",
+	"image": "mcr.microsoft.com/devcontainers/dotnet:7.0",
 	"customizations": {
 		"vscode": {
 			"settings": {
@@ -28,7 +27,6 @@
 	},
 	"containerEnv": {
 		"DOTNET_ENVIRONMENT": "Development",
-		"ASPNETCORE_ENVIRONMENT": "Development",
-		"COSMOSDB__CONNECTIONSTRING": "AccountEndpoint=https://cosmos:8081/;AccountKey=C2y6yDjf5/R+ob0N8A7Cgv30VRDJIWEHLM+4QDU5DE2nQ9nDuVTqobD4b8mGGyPMbIZnqyMsEcaGQy67XIw/Jw=="
+		"ASPNETCORE_ENVIRONMENT": "Development"
 	}
 }
