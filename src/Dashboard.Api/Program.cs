@@ -20,7 +20,10 @@ builder.Services.AddSingleton<CosmosClient>((IServiceProvider serviceProvider) =
         IgnoreNullValues = true,
         PropertyNamingPolicy = CosmosPropertyNamingPolicy.CamelCase
     };
-    return new CosmosClientBuilder(options.Value.ConnectionString)
+
+    var clientBuilder = new CosmosClientBuilder(options.Value.ConnectionString);
+
+    return clientBuilder
         .WithSerializerOptions(serializerOptions)
         .WithBulkExecution(true)
         .Build();
@@ -30,9 +33,8 @@ builder.Services.AddSingleton<ICosmosContext, CosmosContext>();
 builder.Services.AddTransient<IDataSource<Product>, ProductsDataSource>();
 builder.Services.AddTransient<ICosmosDataGenerator<Product>, ProductsCosmosDataGenerator>();
 
-builder.Services.AddApplicationInsightsTelemetry(builder.Configuration);
-
 builder.Services.AddControllers();
+
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
@@ -40,27 +42,13 @@ builder.Services.AddCors();
 
 var app = builder.Build();
 
-app.UseCors(policy =>
-{
-    policy.AllowAnyOrigin();
-    policy.AllowAnyHeader();
-    policy.AllowAnyMethod();
-});
-
-if (app.Environment.IsDevelopment())
-{
-    app.UseSwagger();
-    app.UseSwaggerUI(c =>
-    {
-        c.SwaggerEndpoint("/swagger/v1/swagger.json", "Dashboard API v1");
-        c.RoutePrefix = string.Empty;
-    });
-}
-
-app.UseHttpsRedirection();
-
-app.UseAuthorization();
-
 app.MapControllers();
+
+app.UseSwagger();
+app.UseSwaggerUI(o =>
+{
+    o.SwaggerEndpoint("./swagger/v1/swagger.json", "v1");
+    o.RoutePrefix = String.Empty;
+});
 
 await app.RunAsync();

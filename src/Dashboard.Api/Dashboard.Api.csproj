@@ -7,11 +7,7 @@
   <ItemGroup>
     <PackageReference Include="Azure.Identity" Version="1.10.0" />
     <PackageReference Include="CosmicWorks.Generator" Version="2.0.3" />
-    <PackageReference Include="Microsoft.ApplicationInsights.AspNetCore" Version="2.21.0" />
-    <PackageReference Include="Microsoft.Azure.Cosmos" Version="3.35.3" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.5.0" />
-    <PackageReference Include="Swashbuckle.AspNetCore.SwaggerGen" Version="6.5.0" />
-    <PackageReference Include="Swashbuckle.AspNetCore.SwaggerUI" Version="6.5.0" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Dashboard.Models\Dashboard.Models.csproj" />

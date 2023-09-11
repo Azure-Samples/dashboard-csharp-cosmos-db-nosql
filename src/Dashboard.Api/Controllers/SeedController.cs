@@ -1,7 +1,7 @@
 ﻿using CosmicWorks.Generator;
 using CosmicWorks.Models;
-using Dashboard.Api.Configuration;
 using Dashboard.Api.Options;
+using Dashboard.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 

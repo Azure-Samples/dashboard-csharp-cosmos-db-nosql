@@ -3,69 +3,225 @@
 @inject IHttpClientFactory httpClientFactory
 @inject NavigationManager navigationManager
 
-<PageTitle>Index</PageTitle>
-<h1 class="text-3xl font-bold underline">Hello, world!</h1>
-
-<div class="p-6 max-w-sm bg-white rounded-xl shadow-lg flex items-center space-x-4">
-    <div class="shrink-0">
-        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="h-12 w-12">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M4.26 10.147a60.436 60.436 0 00-.491 6.347A48.627 48.627 0 0112 20.904a48.627 48.627 0 018.232-4.41 60.46 60.46 0 00-.491-6.347m-15.482 0a50.57 50.57 0 00-2.658-.813A59.905 59.905 0 0112 3.493a59.902 59.902 0 0110.399 5.84c-.896.248-1.783.52-2.658.814m-15.482 0A50.697 50.697 0 0112 13.489a50.702 50.702 0 017.74-3.342M6.75 15a.75.75 0 100-1.5.75.75 0 000 1.5zm0 0v-3.675A55.378 55.378 0 0112 8.443m-7.007 11.55A5.981 5.981 0 006.75 15.75v-1.5" />
-        </svg>
-    </div>
-    <div>
-        <div class="text-xl font-medium text-black">Message</div>
-        <p class="text-slate-500">Welcome to your new app!</p>
-    </div>
-</div>
-
-<h2>Products</h2>
-
-<blockquote class="prose">
-    <em>Products count:</em>
-    @productsCount
-</blockquote>
-
-<table>
-    <thead>
-        <tr>
-            <th>#</th>
-            <th>Name</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach(var product in products)
-        {
-            <tr>
-                <td>@product.Id</td>
-                <td>@product.Name</td>
-            </tr>
-        }
-    </tbody>
-</table>
-
-<hr />
-
-<h2>Tags</h2>
-
-<blockquote>
-    <em>Tags count:</em>
-    @tagsCount
-</blockquote>
-
-<ol>
-    @foreach(var tag in tags)
+<main class="min-vh-100 bg-secondary text-bg-secondary">
+    @if (loading)
     {
-        <li>@tag</li>
+        <section class="min-vh-100 d-flex flex-column gap-5 flex-nowrap justify-content-center align-items-center">
+            <div class="spinner-grow" style="width: 10rem; height: 10rem;" role="status">
+                <span class="visually-hidden">@loadingMessage</span>
+            </div>
+            <p class="lead fs-2 text-lowercase fst-italic fw-lighter">
+                @loadingMessage
+                ...
+            </p>
+        </section>
     }
-</ol>
+    else
+    {
+        <section class="min-vh-100 d-flex flex-nowrap flex-row justify-content-start align-items-stretch">
+            <nav class="min-vh-100 d-flex flex-shrink-0 align-items-stretch justify-content-start">
+                <section class="d-flex flex-column">
+                    <aside class="flex-shrink-0 bg-black text-bg-black">
+                        <span class="d-flex align-items-center px-3 pt-3 pb-4">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 500 500" height="30" fill="currentColor"
+                                class="bi pe-none me-3">
+                                <path
+                                    d="M422 250a169 169 0 0 1-50 121c-11 11-22 20-35 27-13 8-27 14-41 18a169 169 0 0 1-152-31 303 303 0 0 1-89 15 63 63 0 0 1-37-12c-5-5-10-9-13-15s-5-12-5-19c0-11 3-21 8-32s12-21 20-31l26-29 25-23a168 168 0 0 1 53-114 166 166 0 0 1 118-47c25 0 50 5 73 16a721 721 0 0 1 85-24l29-2 22 2c8 2 14 4 21 8 6 3 11 8 14 14 4 6 6 13 6 22 0 11-3 21-8 32s-13 22-21 32a294 294 0 0 1-50 52v10l1 10zm-65-134a172 172 0 0 1 55 78l16-15a274 274 0 0 0 34-44c5-7 7-14 7-20 0-4-1-7-4-9l-8-4-11-2h-9c-14 0-27 1-41 4l-39 12zM62 369c9 0 19-1 28-3l28-6a163 163 0 0 1-37-80 284 284 0 0 0-44 54c-4 7-6 14-6 19 0 4 1 7 3 9l9 4 10 2 9 1zm89-19a789 789 0 0 0 236-133 134 134 0 0 0-50-77c-12-9-26-17-40-23s-31-8-47-8a137 137 0 0 0-99 42 137 137 0 0 0-41 99 139 139 0 0 0 41 100zm239-96c-64 49-133 89-208 118a131 131 0 0 0 68 19 137 137 0 0 0 97-40 145 145 0 0 0 43-97zM0 63c0-4 1-7 3-9s5-3 9-3a39 39 0 0 0 21-7l9-7c3-3 5-6 6-10l1-5 1-7 1-5 1-3c1-3 2-4 4-5 2-2 4-2 7-2 4 0 7 1 8 4s3 5 3 9l2 11 5 10 8 8c2 3 6 5 9 6l6 1 6 1a70 70 0 0 1 8 2l5 4 2 6c0 4-1 7-4 9-2 2-5 3-9 3a36 36 0 0 0-21 6l-8 8c-2 3-5 6-6 10l-2 10-2 10-4 5-7 2c-3 0-6-2-8-4s-3-4-3-8a40 40 0 0 0-7-21l-7-9c-3-3-6-5-10-6-3-2-7-2-11-3l-9-1c-3-1-4-3-5-5l-2-5zm500 375c0 3-1 5-3 7l-7 3-9 2a30 30 0 0 0-14 6l-7 4a43 43 0 0 0-11 28v3l-1 2-4 5-6 2c-4 0-7-1-9-3s-3-5-3-9l-3-15-8-12a38 38 0 0 0-29-12c-3 0-5-1-7-3-3-3-4-5-4-9 0-3 1-6 3-7l7-4 9-1 8-2 6-4 6-5c5-3 7-8 9-13l3-15c0-3 1-6 4-8 2-2 4-3 8-3 3 0 6 1 7 3l3 7 2 8 2 8 4 7c1 3 3 5 5 6 4 4 8 7 12 8l13 4 10 3c3 1 4 4 4 9z" />
+                            </svg>
+                            <span class="fs-6">
+                                CosmicWorks Dashboard
+                            </span>
+                        </span>
+                    </aside>
+                    <aside class="flex-fill bg-dark text-bg-dark px-3 pb-3">
+                        @if (products is not null && products.Count > 0)
+                        {
+                            @if (filter is not null)
+                            {
+                                <h6 class="px-3 mt-4 mb-1 text-body-tertiary text-uppercase">
+                                    <span>Filtered to tag</span>
+                                </h6>
+                                <ul class="nav flex-column">
+                                    <li class="nav-item">
+                                        <button class="nav-link d-flex gap-2 align-items-center"
+                                        @onclick="@(_ => RemoveFilterAsync())">
+                                            <span class="badge bg-secondary rounded-pill fs-6">
+                                                @filter
+                                                <i class="bi bi-x-lg ms-2"></i>
+                                            </span>
+                                        </button>
+                                    </li>
+                                </ul>
+                            }
+                            else
+                            {
+                                <h6 class="px-3 mt-4 mb-1 text-body-tertiary text-uppercase">
+                                    <span>
+                                        All Tags:
+                                        <small class="fw-lighter fst-italic">
+                                            @(tags?.Count ?? 0)
+                                        </small>
+                                    </span>
+                                </h6>
+                                <ul class="nav flex-column">
+                                    <li class="nav-item">
+                                        @foreach (var tag in tags ?? Enumerable.Empty<string>())
+                                        {
+                                            <button class="nav-link d-flex gap-2 align-items-center text-body-secondary"
+                                            @onclick="@(_ => ApplyFilterAsync(@tag))">
+                                                <i class="bi bi-tag-fill"></i>
+                                                @tag
+                                            </button>
+                                        }
+                                    </li>
+                                </ul>
+                            }
+                        }
+                    </aside>
+                </section>
+            </nav>
+            <article class="pt-4 pb-2 flex-fill">
+                <section class="px-4 pb-2">
+                    <h1>Products</h1>
+                </section>
+                @if (products is not null && products.Count > 0)
+                {
+                    @if (filter is null)
+                    {
+                        <div class="container-fluid pb-2">
+                            <div class="row gx-5">
+                                <div class="col">
+                                    <blockquote class="text-center">Subcategories</blockquote>
+                                    <Visualization Type="pie" Data="@doughnutData" />
+                                </div>
+                                <div class="col">
+                                    <blockquote class="text-center">Categories</blockquote>
+                                    <Visualization Type="bar" Data="@barData" />
+                                </div>
+                            </div>
+                        </div>
+                    }
+                    <blockquote class="blockquote px-4 fs-6 text-body-secondary fst-italic fw-lighter">
+                        @(filter is null ? "Total count" : "Filtered count"): <small>@(products?.Count ?? 0)</small>
+                    </blockquote>
+                    <table class="table table-striped table-hover table-bordered table-sm">
+                        <thead class="table-dark">
+                            <tr>
+                                <th>#</th>
+                                <th>Name</th>
+                                <th>Description</th>
+                                <th>Category</th>
+                                <th>SKU</th>
+                                <th>Price</th>
+                            </tr>
+                        </thead>
+                        <tbody class="table-group-divider">
+                            @foreach (var product in products ?? Enumerable.Empty<Product>())
+                            {
+                                <tr>
+                                    <td class="text-end fw-bolder text-nowrap">
+                                        @(product.Id[^4..])
+                                    </td>
+                                    <td class="text-nowrap">
+                                        @product.Name
+                                    </td>
+                                    <td class="fst-italic fw-lighter text-wrap">
+                                        @product.Description
+                                    </td>
+                                    <td class="text-nowrap">
+                                        @product.Category.Name
+                                        &vert;
+                                        @product.Category.SubCategory.Name
+                                    </td>
+                                    <td class="text-nowrap">
+                                        @product.SKU
+                                    </td>
+                                    <td class="text-end text-nowrap">
+                                        @($"{product.Price:C}")
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                }
+                else
+                {
+                    <section class="px-4 d-grid gap-2">
+                        <blockquote class="blockquote fs-5 text-body-secondary fst-italic fw-lighter">
+                            The database does not seem to have any items.
+                        </blockquote>
+                        <button type="button" class="btn btn-dark btn-lg" @onclick="@(_ => SeedDataAsync(500))">
+                            <i class="bi bi-gear-fill me-2"></i>
+                            Seed/generate <strong>500</strong> new items
+                        </button>
+                    </section>
+                }
+            </article>
+        </section>
+    }
+</main>
 
 @code {
     private List<Product> products = new();
     private List<string> tags = new();
-    private int productsCount = 0;
-    private int tagsCount = 0;
+    private string? filter = null;
+    private bool loading = true;
+    private string? loadingMessage = null;
+
+    private List<(string, decimal)> barData = new();
+    private List<(string, decimal)> doughnutData = new();
 
     protected override async Task OnInitializedAsync()
+    {
+        loading = true;
+        loadingMessage = "Initializing";
+        await GetProductsAsync();
+        await GetTagsAsync();
+        ConfigCharts();
+        loading = false;
+    }
+
+    private async Task RemoveFilterAsync()
+    {
+        loading = true;
+        loadingMessage = "Removing filter";
+        await GetTagsAsync();
+        await GetProductsAsync();
+        filter = null;
+        loading = false;
+    }
+
+    private async Task ApplyFilterAsync(string tag)
+    {
+        loading = true;
+        loadingMessage = "Applying filter";
+        filter = tag;
+        await GetProductsAsync(tag);
+        loading = false;
+    }
+
+    private async Task SeedDataAsync(int count)
+    {
+        loading = true;
+        loadingMessage = "Seeding data";
+        await PostSeedAsync(count);
+        loading = false;
+    }
+
+    private async Task PostSeedAsync(int count)
+    {
+        HttpClient client = httpClientFactory.CreateClient();
+        client.BaseAddress = new Uri(options.Value.ApiUrl);
+
+        var config = JsonContent.Create(new Seed(count));
+
+        var productsResponse = await client.PostAsync("/seed", config);
+
+        await GetTagsAsync();
+        await GetProductsAsync();
+    }
+
+    private async Task GetProductsAsync()
     {
         products.Clear();
 
@@ -74,12 +230,42 @@
 
         var productsResponse = await client.GetFromJsonAsync<Payload<Product>>("/products");
 
-        productsCount = productsResponse?.Count ?? 0;
         products.AddRange(productsResponse?.Items ?? Enumerable.Empty<Product>());
+    }
+
+    private async Task GetProductsAsync(string tag)
+    {
+        products.Clear();
+
+        HttpClient client = httpClientFactory.CreateClient();
+        client.BaseAddress = new Uri(options.Value.ApiUrl);
+
+        var productsResponse = await client.GetFromJsonAsync<Payload<Product>>($"/products?tag={tag}");
+
+        products.AddRange(productsResponse?.Items ?? Enumerable.Empty<Product>());
+    }
+
+    private async Task GetTagsAsync()
+    {
+        tags.Clear();
+
+        HttpClient client = httpClientFactory.CreateClient();
+        client.BaseAddress = new Uri(options.Value.ApiUrl);
 
         var tagsResponse = await client.GetFromJsonAsync<Payload<string>>("/tags");
 
-        tagsCount = tagsResponse?.Count ?? 0;
         tags.AddRange(tagsResponse?.Items ?? Enumerable.Empty<string>());
+    }
+
+    private void ConfigCharts()
+    {
+        List<(string, decimal)> parsedCategories = products.GroupBy(p => p.Category.Name).Select(g => (g.Key, Convert.ToDecimal(g.Count()))).ToList();
+        List<(string, decimal)> parsedSubCategories = products.GroupBy(p => p.Category.SubCategory.Name).Select(g => (g.Key, Convert.ToDecimal(g.Count()))).ToList();
+
+        doughnutData.Clear();
+        doughnutData.AddRange(parsedSubCategories);
+
+        barData.Clear();
+        barData.AddRange(parsedCategories);
     }
 }

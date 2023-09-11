@@ -1,0 +1,32 @@
+{
+	"name": ".NET development",
+	"image": "mcr.microsoft.com/devcontainers/dotnet:7.0",
+	"customizations": {
+		"vscode": {
+			"settings": {
+				"csharp.suppressBuildAssetsNotification": true
+			},
+			"extensions": [
+				"ms-dotnettools.vscode-dotnet-runtime",
+				"ms-dotnettools.csharp",
+				"ms-dotnettools.csdevkit"
+			]
+		}
+	},
+	"portsAttributes": {
+		"5150": {
+			"label": "API application",
+			"protocol": "http",
+			"onAutoForward": "notify"
+		},
+		"5250": {
+			"label": "Web application",
+			"protocol": "http",
+			"onAutoForward": "openBrowser"
+		}
+	},
+	"containerEnv": {
+		"DOTNET_ENVIRONMENT": "Development",
+		"ASPNETCORE_ENVIRONMENT": "Development"
+	}
+}
