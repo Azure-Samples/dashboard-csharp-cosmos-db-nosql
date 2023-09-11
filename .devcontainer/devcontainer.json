@@ -6,6 +6,7 @@
 	"customizations": {
 		"vscode": {
 			"extensions": [
+				"ms-dotnettools.vscode-dotnet-runtime",
 				"ms-dotnettools.csharp"
 			]
 		}
@@ -13,11 +14,11 @@
 	"portsAttributes": {
 		"5150": {
 			"label": "API application",
-			"onAutoForward": "openPreview"
+			"onAutoForward": "openBrowser"
 		},
 		"5250": {
 			"label": "Web application",
-			"onAutoForward": "openPreview"
+			"onAutoForward": "openBrowser"
 		}
 	},
 	"updateContentCommand": "dotnet build src/Dashboard.sln",
