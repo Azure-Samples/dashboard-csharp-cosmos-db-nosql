@@ -5,6 +5,9 @@
 	"workspaceFolder": "/workspace",
 	"customizations": {
 		"vscode": {
+			"settings": {
+				"csharp.suppressBuildAssetsNotification": true
+			},
 			"extensions": [
 				"ms-dotnettools.vscode-dotnet-runtime",
 				"ms-dotnettools.csharp"
