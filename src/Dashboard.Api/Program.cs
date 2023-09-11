@@ -6,6 +6,7 @@ using Dashboard.Api.Options;
 using Microsoft.Azure.Cosmos;
 using Microsoft.Azure.Cosmos.Fluent;
 using Microsoft.Extensions.Options;
+using Microsoft.OpenApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -37,7 +38,11 @@ builder.Services.AddApplicationInsightsTelemetry(builder.Configuration);
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+
+builder.Services.AddSwaggerGen(c =>
+{
+    c.SwaggerDoc("v1", new OpenApiInfo { Title = "Dashboard API", Version = "v1" });
+});
 
 builder.Services.AddCors();
 
@@ -51,11 +56,7 @@ app.UseCors(policy =>
 });
 
 app.UseSwagger();
-app.UseSwaggerUI(c =>
-{
-    c.SwaggerEndpoint("/swagger/v1/swagger.json", "Dashboard API v1");
-    c.RoutePrefix = string.Empty;
-});
+app.UseSwaggerUI();
 
 app.MapControllers();
 

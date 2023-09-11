@@ -15,10 +15,6 @@
 		}
 	},
 	"portsAttributes": {
-		"5150": {
-			"label": "API application",
-			"onAutoForward": "openBrowser"
-		},
 		"5250": {
 			"label": "Web application",
 			"onAutoForward": "openBrowser"
