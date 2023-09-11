@@ -1,3 +1,4 @@
+using Azure.Identity;
 using CosmicWorks.Data;
 using CosmicWorks.Generator;
 using CosmicWorks.Generator.DataSource;
@@ -20,7 +21,10 @@ builder.Services.AddSingleton<CosmosClient>((IServiceProvider serviceProvider) =
         IgnoreNullValues = true,
         PropertyNamingPolicy = CosmosPropertyNamingPolicy.CamelCase
     };
-    return new CosmosClientBuilder(options.Value.ConnectionString)
+
+    var clientBuilder = new CosmosClientBuilder(options.Value.ConnectionString);
+
+    return clientBuilder
         .WithSerializerOptions(serializerOptions)
         .WithBulkExecution(true)
         .Build();
