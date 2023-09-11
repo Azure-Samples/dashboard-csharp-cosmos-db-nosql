@@ -6,7 +6,6 @@ using Dashboard.Api.Options;
 using Microsoft.Azure.Cosmos;
 using Microsoft.Azure.Cosmos.Fluent;
 using Microsoft.Extensions.Options;
-using Microsoft.OpenApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -34,30 +33,22 @@ builder.Services.AddSingleton<ICosmosContext, CosmosContext>();
 builder.Services.AddTransient<IDataSource<Product>, ProductsDataSource>();
 builder.Services.AddTransient<ICosmosDataGenerator<Product>, ProductsCosmosDataGenerator>();
 
-builder.Services.AddApplicationInsightsTelemetry(builder.Configuration);
-
 builder.Services.AddControllers();
-builder.Services.AddEndpointsApiExplorer();
 
-builder.Services.AddSwaggerGen(c =>
-{
-    c.SwaggerDoc("v1", new OpenApiInfo { Title = "Dashboard API", Version = "v1" });
-});
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen();
 
 builder.Services.AddCors();
 
 var app = builder.Build();
 
-app.UseCors(policy =>
-{
-    policy.AllowAnyOrigin();
-    policy.AllowAnyHeader();
-    policy.AllowAnyMethod();
-});
+app.MapControllers();
 
 app.UseSwagger();
-app.UseSwaggerUI();
-
-app.MapControllers();
+app.UseSwaggerUI(o =>
+{
+    o.SwaggerEndpoint("./swagger/v1/swagger.json", "v1");
+    o.RoutePrefix = String.Empty;
+});
 
 await app.RunAsync();

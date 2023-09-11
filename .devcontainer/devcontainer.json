@@ -2,7 +2,6 @@
 	"name": ".NET development",
 	"dockerComposeFile": "docker-compose.yml",
 	"service": "dev",
-	"workspaceFolder": "/workspace",
 	"customizations": {
 		"vscode": {
 			"settings": {
@@ -16,12 +15,20 @@
 		}
 	},
 	"portsAttributes": {
+		"5150": {
+			"label": "API application",
+			"protocol": "http",
+			"onAutoForward": "notify"
+		},
 		"5250": {
 			"label": "Web application",
+			"protocol": "http",
 			"onAutoForward": "openBrowser"
 		}
 	},
 	"containerEnv": {
+		"DOTNET_ENVIRONMENT": "Development",
+		"ASPNETCORE_ENVIRONMENT": "Development",
 		"COSMOSDB__CONNECTIONSTRING": "AccountEndpoint=https://cosmos:8081/;AccountKey=C2y6yDjf5/R+ob0N8A7Cgv30VRDJIWEHLM+4QDU5DE2nQ9nDuVTqobD4b8mGGyPMbIZnqyMsEcaGQy67XIw/Jw=="
 	}
 }

@@ -3,8 +3,6 @@ services:
     build:
       context: .
     command: sleep infinity
-    volumes:
-      - ..:/workspace
     depends_on:
       - cosmos
   cosmos:
